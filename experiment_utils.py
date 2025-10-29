@@ -51,35 +51,38 @@ def create_participant_folder():
     os.makedirs(participant_folder)
     return participant_folder, participant_num
 
-def get_word_sets():
+def get_word_sets(number_of_words=5):
     """Generate two unique word lists (round 1 & round 2)."""
-    random.seed(42)
+    #random.seed(42)
     # Living room
     list1 = load_words('wordlist_gpt_nonsense.txt')
     list2 = load_words('wordlist_gpt_nonsense2.txt')
+    list3 = load_words('wordlist_gpt_nonsense3.txt')
 
     # Draw first 15 words (5 from each list)
-    random_list1 = random.sample(list1, 7)
-    random_list2 = random.sample(list2, 7)
+    random_list11 = random.sample(list1, number_of_words)
+    remaining1 = [w for w in list1 if w not in random_list11]
+    random_list12 = random.sample(remaining1, number_of_words)
 
-    # Exclude those and draw new ones for second list
-    remaining1 = [w for w in list1 if w not in random_list1]
-    remaining2 = [w for w in list2 if w not in random_list2]
+    random_list21 = random.sample(list2, number_of_words)
+    remaining2 = [w for w in list2 if w not in random_list21]
+    random_list22 = random.sample(remaining2, number_of_words)
 
-    # Draw for the last 2 list
-    random_list3 = random.sample(remaining1, 7)
-    random_list4 = random.sample(remaining2, 7)
+    random_list31 = random.sample(list3, number_of_words)
+    remaining3 = [w for w in list3 if w not in random_list31]
+    random_list32 = random.sample(remaining3, number_of_words)
 
-    
     # Remove the seed
     random.seed()
     
     # Shuffle the internal order of both lists
-    random.shuffle(random_list1)
-    random.shuffle(random_list2)
-    random.shuffle(random_list3)
-    random.shuffle(random_list4)
-    return random_list1, random_list2, random_list3, random_list4
+    random.shuffle(random_list11)
+    random.shuffle(random_list12)
+    random.shuffle(random_list21)
+    random.shuffle(random_list22)
+    random.shuffle(random_list31)
+    random.shuffle(random_list32)
+    return random_list11, random_list12, random_list21, random_list22, random_list31, random_list32
 
 def load_words(filename, both_words=False):
     """
@@ -121,7 +124,7 @@ def begin_practice(win):
     win.flip()
     event.waitKeys(keyList=["space"])
 
-def run_test(win, beep, condition_key, words, timings, instructions):
+def run_test2(win, beep, condition_key, words, timings, instructions):
     """Run a short practice phase (no logging)."""
     time_per_word, time_per_break, time_for_filler_task, time_for_recall = timings
 
@@ -150,12 +153,73 @@ def run_test(win, beep, condition_key, words, timings, instructions):
     # Clear after practice
     win.flip()
 
+def run_test(win, beep, condition_key, words, timings, instructions):
+    """Run a short practice phase (no logging)."""
+    time_per_word, time_per_break, time_for_filler_task, time_for_recall = timings
+    condition_text = instructions[condition_key]
+
+    # Bottom hint text
+    hint_text = visual.TextStim(
+        win,
+        text="If you are done writing the word, press SPACE to skip to the next word.",
+        color="white",
+        height=25,
+        pos=(0, -300)
+    )
+
+    for word in words:
+        event.clearEvents(eventType='keyboard')
+        win.flip()
+
+        # Display instruction, word, and hint
+        instr_text = visual.TextStim(win, text=condition_text, color="white", height=40, pos=(0, 80))
+        word_text = visual.TextStim(win, text=word.lower(), color="white", height=100, bold=True, pos=(0, -40))
+
+        instr_text.draw()
+        word_text.draw()
+        hint_text.draw()
+        win.flip()
+
+        # Timer for this word
+        trial_timer = core.Clock()
+        skipped = False
+
+        # Wait for SPACE or timeout
+        while trial_timer.getTime() < time_per_word:
+            keys = event.getKeys(keyList=["space", "escape"])
+            if "escape" in keys:
+                win.close()
+                core.quit()
+            if "space" in keys:
+                skipped = True
+                break
+            core.wait(0.05)
+
+        # Beep plays only if the participant did NOT skip
+        if not skipped:
+            beep.play()
+            core.wait(0.4)
+
+        # Clear accidental keypresses before next word
+        event.clearEvents(eventType='keyboard')
+
+        # Show fixation cross
+        fixation = visual.TextStim(win, text="+", color="white", height=60)
+        fixation.draw()
+        win.flip()
+        core.wait(time_per_break)
+
+    # Clear after practice
+    win.flip()
+
 def begin_experiment(win, round):
+    event.clearEvents(eventType='keyboard')
     start_text = visual.TextStim(win, text=f"Press SPACE to start experiment round {round}.",
                                  color="white", height=40)
     start_text.draw()
     win.flip()
     event.waitKeys(keyList=["space"])
+
 
 def run_experiment(win, beep, condition_key, words, timings, instructions):
     """
@@ -169,17 +233,26 @@ def run_experiment(win, beep, condition_key, words, timings, instructions):
     results = []
     condition_text = instructions[condition_key]
 
+    # Persistent bottom hint text
+    hint_text = visual.TextStim(
+        win,
+        text="If you are done writing the word, press SPACE to skip to the next word.",
+        color="white",
+        height=25,
+        pos=(0, -300)  # near the bottom of the screen
+    )
+
     for word in words:
         event.clearEvents(eventType='keyboard')
-        # Clear screen
         win.flip()
 
-        # Display instruction + word
+        # Display instruction + word + hint
         instr_text = visual.TextStim(win, text=condition_text, color="white", height=40, pos=(0, 80))
         word_text = visual.TextStim(win, text=word.lower(), color="white", height=100, bold=True, pos=(0, -40))
 
         instr_text.draw()
         word_text.draw()
+        hint_text.draw()
         win.flip()
 
         # Timer for current word
@@ -197,7 +270,7 @@ def run_experiment(win, beep, condition_key, words, timings, instructions):
                 break
             core.wait(0.05)
 
-        # Record the time spent (up to time_per_word if not skipped)
+        # Record the time spent
         time_spent = trial_timer.getTime()
 
         # Beep plays ONLY if participant waited full duration
@@ -205,22 +278,20 @@ def run_experiment(win, beep, condition_key, words, timings, instructions):
             beep.play()
             core.wait(0.4)
 
-        # Show fixation cross before next word
-        # Clear any accidental extra keypresses before next word
+        # Clear extra keypresses
         event.clearEvents(eventType='keyboard')
 
-        # Show fixation cross
+        # Fixation cross before next word
         fixation = visual.TextStim(win, text="+", color="white", height=60)
         fixation.draw()
         win.flip()
 
-
-        # Append trial data
+        # Log trial
         results.append({
             "word": word,
             "condition": condition_key,
             "skipped": skipped,
-            "time_spent": round(time_spent, 3)  # rounded for cleaner CSV
+            "time_spent": round(time_spent, 3)
         })
 
         core.wait(time_per_break)
@@ -229,8 +300,6 @@ def run_experiment(win, beep, condition_key, words, timings, instructions):
     win.flip()
 
     return results
-
-
 
 
 def run_filler_task2(win, time_for_filler_task):
@@ -302,10 +371,11 @@ def run_filler_task(win, time_for_filler_task):
     # --- Instructions ---
     filler_instr = visual.TextStim(
         win,
-        text=("FILLER TASK:\n\nPress SPACE only when you see a CIRCLE!\n"
+        text=("TASK:\n\nPress SPACE only when you see a CIRCLE!\n"
               "Ignore squares and triangles.\n\n(Press SPACE to start)"),
         color="white", height=40, wrapWidth=1200
     )
+
     filler_instr.draw()
     win.flip()
     event.waitKeys(keyList=["space"])
@@ -344,7 +414,7 @@ def run_filler_task(win, time_for_filler_task):
         # wait for response
         response_timer = core.Clock()
         response_made = False
-        while response_timer.getTime() < 0.5:
+        while response_timer.getTime() < 0.4:
             keys = event.getKeys(keyList=["space", "escape"])
             if "escape" in keys:
                 win.close()
@@ -371,7 +441,7 @@ def run_filler_task(win, time_for_filler_task):
 
     # --- End filler ---
     end_text = visual.TextStim(
-        win, text=f"Filler task complete!\nFinal Score: {score}", color="white", height=40
+        win, text=f"Task complete!\nFinal Score: {score}", color="white", height=40
     )
     end_text.draw()
     win.flip()
@@ -379,7 +449,7 @@ def run_filler_task(win, time_for_filler_task):
 
 
 
-def recall_phase(win, beep, time_for_recall_test):
+def recall_phase2(win, beep, time_for_recall_test):
     """
     Run the recall phase where participants recall as many words as possible.
 
@@ -390,7 +460,7 @@ def recall_phase(win, beep, time_for_recall_test):
     """
 
     # --- Prompt to start recall ---
-    recall_text = visual.TextStim(win, text="Press SPACE to begin RECALL.", color="white", height=40)
+    recall_text = visual.TextStim(win, text="Have pen and paper ready to write down as many words as you can remember. Before starting Press SPACE to begin RECALL TEST.", color="white", height=40)
     recall_text.draw()
     win.flip()
     event.waitKeys(keyList=["space"])
@@ -399,12 +469,75 @@ def recall_phase(win, beep, time_for_recall_test):
 
 
     # --- Recall message ---
-    recall_message = visual.TextStim(win, text="Recall as many words as possible!", color="white", height=50)
+    recall_message = visual.TextStim(win, text="Write down as many words you can remember!", color="white", height=50)
     recall_message.draw()
     win.flip()
     core.wait(time_for_recall_test)
 
     # --- End recall with a pleasant beep ---
+    beep.play()
+    core.wait(1)
+
+    # --- Clear the screen after recall ---
+    win.flip()
+
+def recall_phase(win, beep, time_for_recall_test):
+    """
+    Run the recall phase where participants recall as many words as possible.
+    Displays a live countdown timer.
+    """
+
+    # --- Prompt to start recall ---
+    recall_text = visual.TextStim(
+        win,
+        text=(
+            "Have pen and paper ready to write down as many words as you can remember.\n\n"
+            "When ready press SPACE to begin the RECALL TEST."
+        ),
+        color="white",
+        height=40,
+        wrapWidth=1200
+    )
+    recall_text.draw()
+    win.flip()
+    event.waitKeys(keyList=["space"])
+    core.wait(0.2)
+    event.clearEvents(eventType='keyboard')
+
+    # --- Recall message and timer setup ---
+    recall_message = visual.TextStim(
+        win, text="Write down as many words as you can remember!", color="white", height=50, pos=(0, 0)
+    )
+    timer_text = visual.TextStim(
+        win, text="", color="white", height=30, pos=(0, 320)  # top center
+    )
+
+    # --- Start recall timer ---
+    timer = core.Clock()
+
+    while timer.getTime() < time_for_recall_test:
+        # Calculate remaining time
+        remaining = int(time_for_recall_test - timer.getTime())
+        minutes, seconds = divmod(remaining, 60)
+        timer_display = f"Time left: {minutes:02d}:{seconds:02d}"
+
+        # Update timer text
+        timer_text.text = timer_display
+
+        # Draw both elements
+        recall_message.draw()
+        timer_text.draw()
+        win.flip()
+
+        # Check for ESCAPE to exit early
+        keys = event.getKeys(keyList=["escape"])
+        if "escape" in keys:
+            win.close()
+            core.quit()
+
+        core.wait(0.5)  # update roughly every half second
+
+    # --- End recall with beep ---
     beep.play()
     core.wait(1)
 
@@ -435,8 +568,8 @@ def main():
     # Timings (seconds)
     time_per_word = 28 # 28 
     time_per_break = 1.5
-    time_for_filler_task = 120#120
-    time_for_recall = 60 #60
+    time_for_filler_task = 3 #60
+    time_for_recall = 10 #60
     timings = (time_per_word, time_per_break, time_for_filler_task, time_for_recall)
     #timings = (min(time_per_word, 5), min(time_per_break,1), min(time_for_filler_task,10), min(time_for_recall,10))
 
@@ -453,14 +586,7 @@ def main():
         #recall_phase(win, beep, time_for_recall=10)
 
     # Word sets for the two rounds
-    words_round_a, words_round_b, words_round_c, words_round_d = get_word_sets()
-    if participant_num % 2 == 0:
-        words_round1, words_round2 = words_round_a, words_round_b
-        words_round3, words_round4 = words_round_c, words_round_d
-    else:
-        words_round1, words_round2 = words_round_b, words_round_a
-        words_round3, words_round4 = words_round_d, words_round_c
-
+    words_round1, words_round2, words_round3, words_round4, words_round5, words_round6 = get_word_sets()
     
     # Run the two real rounds (use list() for indexing)
     all_results = []
@@ -491,11 +617,28 @@ def main():
     df.to_csv(os.path.join(participant_folder, f"round_{round}.csv"), index=False)
     run_filler_task(win, time_for_filler_task)
     recall_phase(win, beep, time_for_recall)
-
     round += 1
     begin_experiment(win, round)
     # 4th Round
     all_results = run_experiment(win, beep, conditions[1], words_round4, timings, instructions)
+    df = pd.DataFrame(all_results)
+    df.to_csv(os.path.join(participant_folder, f"round_{round}.csv"), index=False)
+    run_filler_task(win, time_for_filler_task)
+    recall_phase(win, beep, time_for_recall)
+
+    round +=1
+    begin_experiment(win, round)
+    # 5th Round
+    all_results = run_experiment(win, beep, conditions[0], words_round5, timings, instructions)
+    df = pd.DataFrame(all_results)
+    df.to_csv(os.path.join(participant_folder, f"round_{round}.csv"), index=False)
+    run_filler_task(win, time_for_filler_task)
+    recall_phase(win, beep, time_for_recall)
+
+    round += 1
+    begin_experiment(win, round)
+    # 6th Round
+    all_results = run_experiment(win, beep, conditions[1], words_round6, timings, instructions)
     df = pd.DataFrame(all_results)
     df.to_csv(os.path.join(participant_folder, f"round_{round}.csv"), index=False)
     run_filler_task(win, time_for_filler_task)
