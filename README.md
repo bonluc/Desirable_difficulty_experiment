@@ -5,7 +5,7 @@ Download the repository using the zip file or the following git commands in a te
 # 2. Create a Virtual Environment
 Before Creating the virtual environment make sure to have a base activated:
 * conda activate base
-* 
+  
 Create and activate a virtual environment.
 **On Windows use**:
 * python -m venv name_venv
