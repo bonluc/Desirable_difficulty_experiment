@@ -1,24 +1,45 @@
 - Welcome to the experiment 
+
 - We will test difference ways of encoding information
+
 - You will write a series of words in two different ways
+
 - The computer will instruct you when to use each one
+
 - The 2 ways of writing are normal and mirrored 
+
 - Using the name "Sam" we will demonstrate these 2 ways 
+
 - If you are instructed to write normally you write *...DEMONSTRATE *
+
 - If you are instructed to write mirrored write *...DEMONSTRATE* 
+
 - In mirrored writing you will keep the order of the letters the same, but write the letters themselves mirrored
+
 - You will first do a practice phase where you do each method on the same name
+
 - Write all letters non-cursive and small cap allways and with your dominant hand
+
 - When you have written the word, you can press SPACE to move on to the next word.
+
 - You will get a maximum time to write each word, if the time runs out a beep tone will play indicating you to stop and get ready for the next word. 
+
 - If you are not finished with writing the word before times runs out you should just move on to next one 
-- Before writing the next word you will clear the screen for the word you just wrote( if writing on note sticker they should put these in a bowl) 
+
+- Before writing the next word you will remove the sticker note or paper you just wrote and take a new one for the next word 
+
 - After each phase you will do a task, the computer will instruct you what to do 
+
 - After the task you will do a memory test on how many words you remembered. 
+
 - You will write these on a piece of paper we give you 
+
 - A sound will play when the test is over. You will then turn the paper upside down to your left, and then begin the next round.
-- You will repeat the whole process of writing a number of words, followed by a task and recall test 4 times in total 
+
+- You will repeat the whole process of writing a number of words, followed by a task and recall test 6 times in total 
+
 - The screen will contain proper instructions for you 
+
 - Are there any question ? 
 
 

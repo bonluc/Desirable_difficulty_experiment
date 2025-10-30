@@ -51,38 +51,33 @@ def create_participant_folder():
     os.makedirs(participant_folder)
     return participant_folder, participant_num
 
-def get_word_sets(number_of_words=5):
+def get_word_sets(number_of_words=5, number_of_list=6):
     """Generate two unique word lists (round 1 & round 2)."""
     #random.seed(42)
     # Living room
     list1 = load_words('wordlist_gpt_nonsense.txt')
-    list2 = load_words('wordlist_gpt_nonsense2.txt')
-    list3 = load_words('wordlist_gpt_nonsense3.txt')
 
     # Draw first 15 words (5 from each list)
-    random_list11 = random.sample(list1, number_of_words)
-    remaining1 = [w for w in list1 if w not in random_list11]
-    random_list12 = random.sample(remaining1, number_of_words)
-
-    random_list21 = random.sample(list2, number_of_words)
-    remaining2 = [w for w in list2 if w not in random_list21]
-    random_list22 = random.sample(remaining2, number_of_words)
-
-    random_list31 = random.sample(list3, number_of_words)
-    remaining3 = [w for w in list3 if w not in random_list31]
-    random_list32 = random.sample(remaining3, number_of_words)
+    random_sampling = random.sample(list1, number_of_words*number_of_list)
+    random_list1 = random_sampling[0:number_of_words]
+    random_list2 = random_sampling[number_of_words:2*number_of_words]
+    random_list3 = random_sampling[2*number_of_words:3*number_of_words]
+    random_list4 = random_sampling[3*number_of_words:4*number_of_words]
+    random_list5 = random_sampling[4*number_of_words:5*number_of_words]
+    random_list6 = random_sampling[5*number_of_words:6*number_of_words]
+                                   
 
     # Remove the seed
-    random.seed()
+    #random.seed()
     
     # Shuffle the internal order of both lists
-    random.shuffle(random_list11)
-    random.shuffle(random_list12)
-    random.shuffle(random_list21)
-    random.shuffle(random_list22)
-    random.shuffle(random_list31)
-    random.shuffle(random_list32)
-    return random_list11, random_list12, random_list21, random_list22, random_list31, random_list32
+    random.shuffle(random_list1)
+    random.shuffle(random_list2)
+    random.shuffle(random_list3)
+    random.shuffle(random_list4)
+    random.shuffle(random_list5)
+    random.shuffle(random_list6)
+    return random_list1, random_list2, random_list3, random_list4, random_list5, random_list6
 
 def load_words(filename, both_words=False):
     """
