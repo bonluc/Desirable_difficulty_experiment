@@ -26,6 +26,6 @@ Then install all required dependencies:
 
 # 4. Run the program
 Make sure you have the venv activated and are currently in directory cloned from github then use in the terminal:
-* python testing_import.py
+* python run_experiment.py
 
 If the program is running the rest should be intuitive :D
