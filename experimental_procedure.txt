@@ -1,17 +1,18 @@
 The following contains the general experimental setup and information relevant to the experimenters: 
 
 - Find a relatively low disturbance environment(meaning low noise levels and little to no visual distractions) for the participants to do the experiment in 
-- Have a pen or pencil for the participants to write the words
+- Have a pen or pencil ready for the participants to write the words
 - Have blocks of paper where participants can write the individual words 
 - Have a bowl/bucket or anything where the participants can easily get rid of the words as soon as they have written them, so they are out of visual sight
 - Have larger pieces of paper for the participants to write on doing the recall test phase. Make sure these are labeled properly or organized so both you and participant know where to write the words for each round.
 - Do not communicate with the participants during experiment 
-- Give them space to perform experiment on their own.
-- When the experiment is over write create and excel or csv file and write the round names round1, round2,...round6 as columns names and write the words they remembered in the rows underneath
-- Make sure to go the script below with the participants before starting the experiment
+- Give them space to perform experiment on their own, don't let your presence be a distraction.
+- When the experiment is over create an excel or csv file and write the round names "round1, round2,...round6" as column names and write the words they remembered in the rows underneath
+- Have them sign the participant form when the experiment is over
+- Make sure to go through the script below with the participants before starting the experiment
 
 
-The following is a general script that can read to the participnats. 
+The following is a general script that can be read to the participants. 
 The script contains necessary information for the participants to perform the experiment properly so their data can be used in analysis later on 
 
 - Welcome to the experiment 
@@ -57,5 +58,7 @@ The script contains necessary information for the participants to perform the ex
 - The screen will contain proper instructions for you 
 
 - Are there any question ? 
+
+(Go through the practice phase with them and verify they write mirrored properly)
 
 
