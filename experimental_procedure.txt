@@ -1,3 +1,18 @@
+The following contains the general experimental setup and information relevant to the experimenters: 
+
+- Find a relatively low disturbance environment(meaning low noise levels and little to no visual distractions) for the participants to do the experiment in 
+- Have a pen or pencil for the participants to write the words
+- Have blocks of paper where participants can write the individual words 
+- Have a bowl/bucket or anything where the participants can easily get rid of the words as soon as they have written them, so they are out of visual sight
+- Have larger pieces of paper for the participants to write on doing the recall test phase. Make sure these are labeled properly or organized so both you and participant know where to write the words for each round.
+- Do not communicate with the participants during experiment 
+- Give them space to perform experiment on their own.
+- Make sure to go the script below with the participants before starting the experiment
+
+
+The following is a general script that can read to the participnats. 
+The script contains necessary information for the participants to perform the experiment properly so their data can be used in analysis later on 
+
 - Welcome to the experiment 
 
 - We will test difference ways of encoding information
@@ -8,7 +23,7 @@
 
 - The 2 ways of writing are normal and mirrored 
 
-- Using the name "Sam" we will demonstrate these 2 ways 
+- Using the name "jerry" we will demonstrate these 2 ways 
 
 - If you are instructed to write normally you write *...DEMONSTRATE *
 
@@ -22,17 +37,17 @@
 
 - When you have written the word, you can press SPACE to move on to the next word.
 
-- You will get a maximum time to write each word, if the time runs out a beep tone will play indicating you to stop and get ready for the next word. 
+- You will get a limited time to write each word, if the time runs out a beep tone will play indicating you to stop and get ready for the next word. 
 
 - If you are not finished with writing the word before times runs out you should just move on to next one 
 
-- Before writing the next word you will remove the sticker note or paper you just wrote and take a new one for the next word 
+- Before writing the next word you will remove the sticker note or paper you just wrote on and take a new one for the next word 
 
 - After each phase you will do a task, the computer will instruct you what to do 
 
 - After the task you will do a memory test on how many words you remembered. 
 
-- You will write these on a piece of paper we give you 
+- You will write these on a piece of paper we have given you and labelled properly 
 
 - A sound will play when the test is over. You will then turn the paper upside down to your left, and then begin the next round.
 

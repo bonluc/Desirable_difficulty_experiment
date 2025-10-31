@@ -119,34 +119,6 @@ def begin_practice(win):
     win.flip()
     event.waitKeys(keyList=["space"])
 
-def run_test2(win, beep, condition_key, words, timings, instructions):
-    """Run a short practice phase (no logging)."""
-    time_per_word, time_per_break, time_for_filler_task, time_for_recall = timings
-
-    condition_text = instructions[condition_key]
-
-    for word in words:
-        # Clear frame before drawing a new trial
-        win.flip()
-
-        instr_text = visual.TextStim(win, text=condition_text, color="white", height=40, pos=(0, 80))
-        word_text = visual.TextStim(win, text=word.lower(), color="white", height=100, bold=True, pos=(0, -40))
-
-        instr_text.draw()
-        word_text.draw()
-        win.flip()
-        core.wait(time_per_word)
-
-        beep.play()
-        core.wait(0.4)
-
-        fixation = visual.TextStim(win, text="+", color="white", height=60)
-        fixation.draw()
-        win.flip()
-        core.wait(time_per_break)
-
-    # Clear after practice
-    win.flip()
 
 def run_test(win, beep, condition_key, words, timings, instructions):
     """Run a short practice phase (no logging)."""
@@ -297,67 +269,6 @@ def run_experiment(win, beep, condition_key, words, timings, instructions):
     return results
 
 
-def run_filler_task2(win, time_for_filler_task):
-    """
-    Run the filler task where the participant presses SPACE only when a circle appears.
-    Args:
-        win: PsychoPy visual.Window object.
-        time_for_filler_task: Duration of filler task in seconds.
-    """
-
-    # --- Instructions ---
-    filler_instr = visual.TextStim(
-        win,
-        text=("FILLER TASK:\n\nPress SPACE only when you see a CIRCLE!\n"
-              "Ignore squares and triangles.\n\n(Press SPACE to start)"),
-        color="white", height=40, wrapWidth=1200
-    )
-    filler_instr.draw()
-    win.flip()
-    event.waitKeys(keyList=["space"])
-
-    # --- Shapes ---
-    circle = visual.Circle(win, radius=60, fillColor="white", lineColor="white")
-    square = visual.Rect(win, width=120, height=120, fillColor="white", lineColor="white")
-    triangle = visual.ShapeStim(win, vertices=[(-60, -60), (60, -60), (0, 60)],
-                                fillColor="white", lineColor="white")
-
-    shapes = [("circle", circle), ("square", square), ("triangle", triangle)]
-
-    # --- Task Loop ---
-    timer = core.Clock()
-    timer.reset()
-
-    while timer.getTime() < time_for_filler_task:
-        # brief pause before next shape
-        win.flip()
-        core.wait(random.uniform(0.7, 1.5))
-
-        # select random shape
-        shape_name, shape = random.choice(shapes)
-        shape.pos = (random.randint(-600, 600), random.randint(-350, 350))
-        shape.draw()
-        win.flip()
-
-        # wait for response
-        response_timer = core.Clock()
-        while response_timer.getTime() < 5.0:  # each shape visible for 1s
-            keys = event.getKeys(keyList=["space", "escape"])
-            if "escape" in keys:
-                win.close()
-                core.quit()
-            if "space" in keys:
-                break
-
-        # clear screen
-        win.flip()
-
-    # --- End filler ---
-    end_text = visual.TextStim(win, text="Filler task complete!", color="white", height=40)
-    end_text.draw()
-    win.flip()
-    core.wait(2)
-
 def run_filler_task(win, time_for_filler_task):
     """
     Run the filler task where the participant presses SPACE only when a circle appears.
@@ -442,39 +353,6 @@ def run_filler_task(win, time_for_filler_task):
     win.flip()
     core.wait(3)
 
-
-
-def recall_phase2(win, beep, time_for_recall_test):
-    """
-    Run the recall phase where participants recall as many words as possible.
-
-    Args:
-        win: PsychoPy visual.Window object.
-        beep: PsychoPy sound.Sound object for feedback.
-        time_for_recall_test: Duration of recall phase in seconds.
-    """
-
-    # --- Prompt to start recall ---
-    recall_text = visual.TextStim(win, text="Have pen and paper ready to write down as many words as you can remember. Before starting Press SPACE to begin RECALL TEST.", color="white", height=40)
-    recall_text.draw()
-    win.flip()
-    event.waitKeys(keyList=["space"])
-    core.wait(0.2)  # short debounce delay
-    event.clearEvents(eventType='keyboard')
-
-
-    # --- Recall message ---
-    recall_message = visual.TextStim(win, text="Write down as many words you can remember!", color="white", height=50)
-    recall_message.draw()
-    win.flip()
-    core.wait(time_for_recall_test)
-
-    # --- End recall with a pleasant beep ---
-    beep.play()
-    core.wait(1)
-
-    # --- Clear the screen after recall ---
-    win.flip()
 
 def recall_phase(win, beep, time_for_recall_test):
     """
