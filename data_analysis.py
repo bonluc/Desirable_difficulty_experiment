@@ -16,8 +16,9 @@ def generate_rounds_data(results_df, round_df, round_number, rounds):
     return rounds
 
 if __name__ == '__main__':
+    number_of_participants = 6
     participants_data = {'participant': [], 'avg_words_normal':[], 'avg_words_mirrored':[], 'avg_normal_time(s)': [], 'avg_mirrored_time(s)': []} 
-    for participant in range(1,7):
+    for participant in range(1,number_of_participants + 1):
         rounds = {'round': [], 'condition': [], 'total_time': [], 'total_words': []}
         #results_df = pd.read_excel(f"participants_results\participant_{participant}\participant_{participant}_results.xlsx")
         results_df = pd.read_excel(f"participants_results/participant_{participant}/participant_{participant}_results.xlsx")
